@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title> 2 Lectura de Datos | Un Recorrido Guiado por el Algoritmo Metropolis</title>
+  <meta name="description" content="Este proyecto consiste en observar e identificar las funcionalidades del algoritmo de Metropolis-Hastings y sus aplicaciones en el campo de las estadìsticas" />
+  <meta name="generator" content="bookdown 0.34 and GitBook 2.6.7" />
+
+  <meta property="og:title" content=" 2 Lectura de Datos | Un Recorrido Guiado por el Algoritmo Metropolis" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Este proyecto consiste en observar e identificar las funcionalidades del algoritmo de Metropolis-Hastings y sus aplicaciones en el campo de las estadìsticas" />
+  <meta name="github-repo" content="https://joanurp.github.io/simulacion/" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content=" 2 Lectura de Datos | Un Recorrido Guiado por el Algoritmo Metropolis" />
+  
+  <meta name="twitter:description" content="Este proyecto consiste en observar e identificar las funcionalidades del algoritmo de Metropolis-Hastings y sus aplicaciones en el campo de las estadìsticas" />
+  
+
+<meta name="author" content="Jose Angel Urquijo Parra, Yuleidys Mejía Gutierrez" />
+
+
+<meta name="date" content="2023-10-06" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="conclusiones.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Un Recorrido Guiado por el Algoritmo Metropolis</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introducción</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#funcionamiento-basico-del-algoritmo-metropolis-y-su-relevancia-en-simulacion-estadistica."><i class="fa fa-check"></i><b>1.1</b> funcionamiento basico del algoritmo Metropolis y su relevancia en simulacion estadistica.</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="lectura-de-datos.html"><a href="lectura-de-datos.html"><i class="fa fa-check"></i><b>2</b> Lectura de Datos</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="lectura-de-datos.html"><a href="lectura-de-datos.html#funciones-auxiliares"><i class="fa fa-check"></i><b>2.1</b> Funciones Auxiliares</a></li>
+<li class="chapter" data-level="2.2" data-path="lectura-de-datos.html"><a href="lectura-de-datos.html#estimación-de-máxima-verosimilitud"><i class="fa fa-check"></i><b>2.2</b> Estimación de Máxima Verosimilitud</a></li>
+<li class="chapter" data-level="2.3" data-path="lectura-de-datos.html"><a href="lectura-de-datos.html#metrópolis-de-paseo-aleatorio"><i class="fa fa-check"></i><b>2.3</b> Metrópolis de paseo aleatorio</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="lectura-de-datos.html"><a href="lectura-de-datos.html#inspección-de-la-salida"><i class="fa fa-check"></i><b>2.3.1</b> Inspección de la salida</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="lectura-de-datos.html"><a href="lectura-de-datos.html#metrópolis-guiada"><i class="fa fa-check"></i><b>2.4</b> Metrópolis guiada</a></li>
+<li class="chapter" data-level="2.5" data-path="lectura-de-datos.html"><a href="lectura-de-datos.html#contraste-de-salida-con-caminata-aleatoria"><i class="fa fa-check"></i><b>2.5</b> Contraste de salida con caminata aleatoria</a></li>
+<li class="chapter" data-level="2.6" data-path="lectura-de-datos.html"><a href="lectura-de-datos.html#algoritmo-de-metrópolis-guiado-y-adaptativo"><i class="fa fa-check"></i><b>2.6</b> Algoritmo de metrópolis guiado y adaptativo</a></li>
+<li class="chapter" data-level="2.7" data-path="lectura-de-datos.html"><a href="lectura-de-datos.html#salida-contrastante"><i class="fa fa-check"></i><b>2.7</b> Salida contrastante</a></li>
+<li class="chapter" data-level="2.8" data-path="lectura-de-datos.html"><a href="lectura-de-datos.html#algoritmo-de-metrópolis-guiado-y-adaptativo-utilizando-priores-normales"><i class="fa fa-check"></i><b>2.8</b> Algoritmo de metrópolis guiado y adaptativo utilizando priores normales</a>
+<ul>
+<li class="chapter" data-level="2.8.1" data-path="lectura-de-datos.html"><a href="lectura-de-datos.html#inspeccion-de-salida"><i class="fa fa-check"></i><b>2.8.1</b> Inspeccion de salida</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="conclusiones.html"><a href="conclusiones.html"><i class="fa fa-check"></i><b>3</b> Conclusiones</a></li>
+<li class="chapter" data-level="4" data-path="referencias.html"><a href="referencias.html"><i class="fa fa-check"></i><b>4</b> Referencias</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Un Recorrido Guiado por el Algoritmo Metropolis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="lectura-de-datos" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number"> 2</span> Lectura de Datos<a href="lectura-de-datos.html#lectura-de-datos" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Estos datos se utilizan comúnmente en análisis estadísticos, como modelos de regresión logística, para estudiar la relación entre la exposición a un factor y la probabilidad de desarrollar una enfermedad, en este caso, la leucemia. El análisis estadístico podría ayudar a determinar si la exposición está relacionada con un mayor riesgo de leucemia.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="lectura-de-datos.html#cb2-1" tabindex="-1"></a>y <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">36</span>), <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">198</span>)) <span class="co"># Casos de Leucemia</span></span>
+<span id="cb2-2"><a href="lectura-de-datos.html#cb2-2" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">3</span>), <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">33</span>), <span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">5</span>), <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">193</span>)) <span class="co"># Exposicion</span></span></code></pre></div>
+<div id="funciones-auxiliares" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Funciones Auxiliares<a href="lectura-de-datos.html#funciones-auxiliares" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Las funciones auxiliares en este caso son un componente utilizado para abordar y analizar los casos y controles de la leucemia.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="lectura-de-datos.html#cb3-1" tabindex="-1"></a>expit <span class="ot">&lt;-</span> <span class="cf">function</span>(mu) <span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">+</span><span class="fu">exp</span>(<span class="sc">-</span>mu))</span>
+<span id="cb3-2"><a href="lectura-de-datos.html#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="lectura-de-datos.html#cb3-3" tabindex="-1"></a><span class="fu">message</span>(<span class="st">&quot;La función expit toma un valor mu como entrada</span></span>
+<span id="cb3-4"><a href="lectura-de-datos.html#cb3-4" tabindex="-1"></a><span class="st">y calcula la función sigmoidal o logística, </span></span>
+<span id="cb3-5"><a href="lectura-de-datos.html#cb3-5" tabindex="-1"></a><span class="st">que es 1 / (1 + exp(-mu)).</span></span>
+<span id="cb3-6"><a href="lectura-de-datos.html#cb3-6" tabindex="-1"></a><span class="st">La función sigmoidal toma un valor real mu</span></span>
+<span id="cb3-7"><a href="lectura-de-datos.html#cb3-7" tabindex="-1"></a><span class="st">y lo transforma en un valor en el rango de 0 a 1.&quot;</span>)</span>
+<span id="cb3-8"><a href="lectura-de-datos.html#cb3-8" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="lectura-de-datos.html#cb3-9" tabindex="-1"></a>loglik <span class="ot">=</span> <span class="cf">function</span>(y,x,beta){</span>
+<span id="cb3-10"><a href="lectura-de-datos.html#cb3-10" tabindex="-1"></a>  <span class="co"># Calcular la probabilidad logarítmica</span></span>
+<span id="cb3-11"><a href="lectura-de-datos.html#cb3-11" tabindex="-1"></a>  lli <span class="ot">=</span> <span class="fu">dbinom</span>(y, <span class="dv">1</span>, <span class="fu">expit</span>(beta[<span class="dv">1</span>] <span class="sc">+</span> x<span class="sc">*</span>beta[<span class="dv">2</span>]), <span class="at">log=</span><span class="cn">TRUE</span>)</span>
+<span id="cb3-12"><a href="lectura-de-datos.html#cb3-12" tabindex="-1"></a>  <span class="fu">sum</span>(lli)</span>
+<span id="cb3-13"><a href="lectura-de-datos.html#cb3-13" tabindex="-1"></a>}</span>
+<span id="cb3-14"><a href="lectura-de-datos.html#cb3-14" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="lectura-de-datos.html#cb3-15" tabindex="-1"></a><span class="fu">message</span>(<span class="st">&quot;La función loglik calcula el logaritmo de la función</span></span>
+<span id="cb3-16"><a href="lectura-de-datos.html#cb3-16" tabindex="-1"></a><span class="st">        de verosimilitud (likelihood) de un modelo de regresión</span></span>
+<span id="cb3-17"><a href="lectura-de-datos.html#cb3-17" tabindex="-1"></a><span class="st">        logística en donde la verosimilitud de los datos se </span></span>
+<span id="cb3-18"><a href="lectura-de-datos.html#cb3-18" tabindex="-1"></a><span class="st">        asume como una distribución binomial y luego toma el</span></span>
+<span id="cb3-19"><a href="lectura-de-datos.html#cb3-19" tabindex="-1"></a><span class="st">        logaritmo de esa verosimilitud.&quot;</span>)</span>
+<span id="cb3-20"><a href="lectura-de-datos.html#cb3-20" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="lectura-de-datos.html#cb3-21" tabindex="-1"></a>riskdifference <span class="ot">=</span> <span class="cf">function</span>(y,x,beta){</span>
+<span id="cb3-22"><a href="lectura-de-datos.html#cb3-22" tabindex="-1"></a>  <span class="co"># calcular una diferencia de riesgo</span></span>
+<span id="cb3-23"><a href="lectura-de-datos.html#cb3-23" tabindex="-1"></a>  poprisk <span class="ot">=</span> <span class="fl">4.8</span><span class="sc">/</span><span class="dv">100000</span></span>
+<span id="cb3-24"><a href="lectura-de-datos.html#cb3-24" tabindex="-1"></a>  popodds <span class="ot">=</span> poprisk<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>poprisk)</span>
+<span id="cb3-25"><a href="lectura-de-datos.html#cb3-25" tabindex="-1"></a>  studyodds <span class="ot">=</span> <span class="fu">mean</span>(y)<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span><span class="fu">mean</span>(y))</span>
+<span id="cb3-26"><a href="lectura-de-datos.html#cb3-26" tabindex="-1"></a>  r1 <span class="ot">=</span> <span class="fu">expit</span>(<span class="fu">log</span>(popodds<span class="sc">/</span>studyodds) <span class="sc">+</span> beta[<span class="dv">1</span>] <span class="sc">+</span> beta[<span class="dv">2</span>])</span>
+<span id="cb3-27"><a href="lectura-de-datos.html#cb3-27" tabindex="-1"></a>  r0 <span class="ot">=</span> <span class="fu">expit</span>(<span class="fu">log</span>(popodds<span class="sc">/</span>studyodds) <span class="sc">+</span> beta[<span class="dv">1</span>])</span>
+<span id="cb3-28"><a href="lectura-de-datos.html#cb3-28" tabindex="-1"></a>  <span class="fu">mean</span>(r1<span class="sc">-</span>r0)</span>
+<span id="cb3-29"><a href="lectura-de-datos.html#cb3-29" tabindex="-1"></a>}</span>
+<span id="cb3-30"><a href="lectura-de-datos.html#cb3-30" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="lectura-de-datos.html#cb3-31" tabindex="-1"></a><span class="fu">message</span>(<span class="st">&quot;riskdifference es la función que calcula la diferencia</span></span>
+<span id="cb3-32"><a href="lectura-de-datos.html#cb3-32" tabindex="-1"></a><span class="st">        de riesgo entre dos grupos (ejemplo; casos de leucemia).&quot;</span>)</span></code></pre></div>
+</div>
+<div id="estimación-de-máxima-verosimilitud" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> Estimación de Máxima Verosimilitud<a href="lectura-de-datos.html#estimación-de-máxima-verosimilitud" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Se realizó un análisis de regresión logística por el método de maxima verosimilitud para estimar los parametros de <span class="math inline">\(\beta_0\)</span> y <span class="math inline">\(\beta_1\)</span>. Luego es realizado una comparación de las estimaciones con el método de paseo aleatorio.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="lectura-de-datos.html#cb4-1" tabindex="-1"></a>data <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">leuk=</span>y, <span class="at">magfield=</span>x)  <span class="co">#leuk variable de respuesta que indica un evento o no</span></span>
+<span id="cb4-2"><a href="lectura-de-datos.html#cb4-2" tabindex="-1"></a>mod <span class="ot">=</span> <span class="fu">glm</span>(leuk <span class="sc">~</span> magfield, <span class="at">family=</span><span class="fu">binomial</span>(), <span class="at">data=</span>data) <span class="co"># Varaible predictoriia</span></span>
+<span id="cb4-3"><a href="lectura-de-datos.html#cb4-3" tabindex="-1"></a><span class="fu">summary</span>(mod)<span class="sc">$</span>coefficients</span></code></pre></div>
+<pre><code>             Estimate Std. Error   z value     Pr(&gt;|z|)
+(Intercept) -1.766183   0.188373 -9.375988 6.853094e-21
+magfield     1.255357   0.754200  1.664488 9.601492e-02</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="lectura-de-datos.html#cb6-1" tabindex="-1"></a><span class="fu">message</span>(<span class="st">&quot;partiendo de que leuk es una variable de respuesta que indica evento o no</span></span>
+<span id="cb6-2"><a href="lectura-de-datos.html#cb6-2" tabindex="-1"></a><span class="st">y magfield e la variabe predictoria lo que se hace es obtener los coeficientes </span></span>
+<span id="cb6-3"><a href="lectura-de-datos.html#cb6-3" tabindex="-1"></a><span class="st">del modelo de regresión logística. Estos coeficientes incluyen el intercepto </span></span>
+<span id="cb6-4"><a href="lectura-de-datos.html#cb6-4" tabindex="-1"></a><span class="st">(coeficiente beta0) y el coeficiente asociado con magfield (coeficiente beta1).&quot;</span>)</span>
+<span id="cb6-5"><a href="lectura-de-datos.html#cb6-5" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="lectura-de-datos.html#cb6-6" tabindex="-1"></a>beta1 <span class="ot">=</span> <span class="fu">summary</span>(mod)<span class="sc">$</span>coefficients[<span class="dv">2</span>,<span class="dv">1</span>]</span>
+<span id="cb6-7"><a href="lectura-de-datos.html#cb6-7" tabindex="-1"></a>se1 <span class="ot">=</span> <span class="fu">summary</span>(mod)<span class="sc">$</span>coefficients[<span class="dv">2</span>,<span class="dv">2</span>]</span>
+<span id="cb6-8"><a href="lectura-de-datos.html#cb6-8" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">Coeficiente beta de máxima verosimilitud (IC del 95%)</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb6-9"><a href="lectura-de-datos.html#cb6-9" tabindex="-1"></a>    <span class="fu">round</span>(<span class="fu">c</span>(<span class="at">beta=</span>beta1, <span class="at">ll=</span>beta1<span class="sc">+</span>se1<span class="sc">*</span><span class="fu">qnorm</span>(<span class="fl">0.025</span>), </span>
+<span id="cb6-10"><a href="lectura-de-datos.html#cb6-10" tabindex="-1"></a>            <span class="at">ul=</span>beta1<span class="sc">+</span>se1<span class="sc">*</span><span class="fu">qnorm</span>(<span class="fl">0.975</span>)), <span class="dv">2</span>))</span></code></pre></div>
+<pre><code>
+Coeficiente beta de máxima verosimilitud (IC del 95%)
+ 1.26 -0.22 2.73</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="lectura-de-datos.html#cb8-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">Odds ratio de máxima verosimilitud (IC 95%)</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb8-2"><a href="lectura-de-datos.html#cb8-2" tabindex="-1"></a>    <span class="fu">round</span>(<span class="fu">exp</span>(<span class="fu">c</span>(<span class="at">beta=</span>beta1, <span class="at">ll=</span>beta1<span class="sc">+</span>se1<span class="sc">*</span><span class="fu">qnorm</span>(<span class="fl">0.025</span>),</span>
+<span id="cb8-3"><a href="lectura-de-datos.html#cb8-3" tabindex="-1"></a>                <span class="at">ul=</span>beta1<span class="sc">+</span>se1<span class="sc">*</span><span class="fu">qnorm</span>(<span class="fl">0.975</span>))), <span class="dv">2</span>))</span></code></pre></div>
+<pre><code>
+Odds ratio de máxima verosimilitud (IC 95%)
+ 3.51 0.8 15.39</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="lectura-de-datos.html#cb10-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">Diferencia de riesgo de máxima verosimilitud</span><span class="sc">\n</span><span class="st">&quot;</span>,  </span>
+<span id="cb10-2"><a href="lectura-de-datos.html#cb10-2" tabindex="-1"></a>    <span class="fu">round</span>(<span class="fu">c</span>(<span class="at">rd_1000=</span><span class="fu">riskdifference</span>(y,x,mod<span class="sc">$</span>coefficients)<span class="sc">*</span><span class="dv">1000</span>), <span class="dv">2</span>))</span></code></pre></div>
+<pre><code>
+Diferencia de riesgo de máxima verosimilitud
+ 0.11</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="lectura-de-datos.html#cb12-1" tabindex="-1"></a><span class="fu">message</span>(<span class="st">&quot;se imprimen tanto los valores del coeficiente de beta1, </span></span>
+<span id="cb12-2"><a href="lectura-de-datos.html#cb12-2" tabindex="-1"></a><span class="st">        del odds ratio y de la diferencia de riesgo máxima&quot;</span>)</span></code></pre></div>
+</div>
+<div id="metrópolis-de-paseo-aleatorio" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> Metrópolis de paseo aleatorio<a href="lectura-de-datos.html#metrópolis-de-paseo-aleatorio" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Aplicando el algoritmo metropolis de paseo aleatorio para muestrear la distribución posterior de los coeficientes del modelo de regresión logística binaria aplicado anteriormente. A medida que avanza el ciclo, se registran las muestras aceptadas de los coeficientes y las diferencias de riesgo en beta_post y rd, respectivamente.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="lectura-de-datos.html#cb13-1" tabindex="-1"></a><span class="co"># inicializacion</span></span>
+<span id="cb13-2"><a href="lectura-de-datos.html#cb13-2" tabindex="-1"></a>M<span class="ot">=</span><span class="dv">10000</span></span>
+<span id="cb13-3"><a href="lectura-de-datos.html#cb13-3" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">91828</span>)</span>
+<span id="cb13-4"><a href="lectura-de-datos.html#cb13-4" tabindex="-1"></a>beta_post <span class="ot">=</span> <span class="fu">matrix</span>(<span class="at">nrow=</span>M, <span class="at">ncol=</span><span class="dv">2</span>)</span>
+<span id="cb13-5"><a href="lectura-de-datos.html#cb13-5" tabindex="-1"></a><span class="fu">colnames</span>(beta_post) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&#39;beta0&#39;</span>, <span class="st">&#39;beta1&#39;</span>)</span>
+<span id="cb13-6"><a href="lectura-de-datos.html#cb13-6" tabindex="-1"></a>accept <span class="ot">=</span> <span class="fu">numeric</span>(M)</span>
+<span id="cb13-7"><a href="lectura-de-datos.html#cb13-7" tabindex="-1"></a>rd <span class="ot">=</span> <span class="fu">numeric</span>(M)</span>
+<span id="cb13-8"><a href="lectura-de-datos.html#cb13-8" tabindex="-1"></a>beta_post[<span class="dv">1</span>,] <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="sc">-</span><span class="dv">3</span>)</span>
+<span id="cb13-9"><a href="lectura-de-datos.html#cb13-9" tabindex="-1"></a>rd[<span class="dv">1</span>] <span class="ot">=</span> <span class="fu">riskdifference</span>(y,x,beta_post[<span class="dv">1</span>,])</span>
+<span id="cb13-10"><a href="lectura-de-datos.html#cb13-10" tabindex="-1"></a>accept[<span class="dv">1</span>] <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb13-11"><a href="lectura-de-datos.html#cb13-11" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>M){</span>
+<span id="cb13-12"><a href="lectura-de-datos.html#cb13-12" tabindex="-1"></a>  oldb <span class="ot">=</span> beta_post[i<span class="dv">-1</span>,]</span>
+<span id="cb13-13"><a href="lectura-de-datos.html#cb13-13" tabindex="-1"></a>  prop <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="dv">2</span>, <span class="at">sd=</span><span class="fl">0.2</span>)</span>
+<span id="cb13-14"><a href="lectura-de-datos.html#cb13-14" tabindex="-1"></a>  newb <span class="ot">=</span> oldb<span class="sc">+</span>prop</span>
+<span id="cb13-15"><a href="lectura-de-datos.html#cb13-15" tabindex="-1"></a>  num <span class="ot">=</span> <span class="fu">loglik</span>(y,x,newb)</span>
+<span id="cb13-16"><a href="lectura-de-datos.html#cb13-16" tabindex="-1"></a>  den <span class="ot">=</span> <span class="fu">loglik</span>(y,x,oldb)</span>
+<span id="cb13-17"><a href="lectura-de-datos.html#cb13-17" tabindex="-1"></a>  acceptprob <span class="ot">=</span> <span class="fu">exp</span>(num<span class="sc">-</span>den)</span>
+<span id="cb13-18"><a href="lectura-de-datos.html#cb13-18" tabindex="-1"></a>  acc <span class="ot">=</span> (acceptprob <span class="sc">&gt;</span> <span class="fu">runif</span>(<span class="dv">1</span>))</span>
+<span id="cb13-19"><a href="lectura-de-datos.html#cb13-19" tabindex="-1"></a>  <span class="cf">if</span>(acc){</span>
+<span id="cb13-20"><a href="lectura-de-datos.html#cb13-20" tabindex="-1"></a>    beta_post[i,] <span class="ot">=</span> newb </span>
+<span id="cb13-21"><a href="lectura-de-datos.html#cb13-21" tabindex="-1"></a>    accept[i] <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb13-22"><a href="lectura-de-datos.html#cb13-22" tabindex="-1"></a>  }<span class="cf">else</span>{</span>
+<span id="cb13-23"><a href="lectura-de-datos.html#cb13-23" tabindex="-1"></a>    beta_post[i,] <span class="ot">=</span> oldb </span>
+<span id="cb13-24"><a href="lectura-de-datos.html#cb13-24" tabindex="-1"></a>    accept[i] <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb13-25"><a href="lectura-de-datos.html#cb13-25" tabindex="-1"></a>  }</span>
+<span id="cb13-26"><a href="lectura-de-datos.html#cb13-26" tabindex="-1"></a>  rd[i] <span class="ot">=</span> <span class="dv">1000</span><span class="sc">*</span><span class="fu">riskdifference</span>(y,x,beta_post[i,])</span>
+<span id="cb13-27"><a href="lectura-de-datos.html#cb13-27" tabindex="-1"></a>}</span></code></pre></div>
+<p>Luego es realizado una simulación de cadenas de Markov Monte Carlo (MCMC) para estimar la distribución posterior de los coeficientes de regresión. Comienza inicializando varias variables, como el número de iteraciones M, semilla aleatoria, matrices para almacenar los coeficientes y la tasa de aceptación, y estableciendo un valor inicial para los coeficientes. Luego, se inicia un bucle que genera nuevas propuestas para los coeficientes a partir de la distribución normal y calcula la probabilidad de aceptación basada en el logaritmo de la verosimilitud de los nuevos coeficientes en comparación con los anteriores. Se utiliza un criterio de aceptación probabilístico, y si se acepta la nueva propuesta, se actualizan los coeficientes y se registra la aceptación. Si no se acepta, se mantienen los coeficientes anteriores y se registra la no aceptación. Además, se calcula y almacena el valor de la diferencia de riesgo multiplicada por 1000 en cada iteración. Este proceso se repite M veces para generar una muestra de la distribución posterior de los coeficientes y la diferencia de riesgo.</p>
+<div id="inspección-de-la-salida" class="section level3 hasAnchor" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> Inspección de la salida<a href="lectura-de-datos.html#inspección-de-la-salida" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="lectura-de-datos.html#cb14-1" tabindex="-1"></a><span class="fu">mean</span>(accept)</span></code></pre></div>
+<pre><code>[1] 0.6551</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="lectura-de-datos.html#cb16-1" tabindex="-1"></a><span class="fu">summary</span>(beta_post)</span></code></pre></div>
+<pre><code>     beta0            beta1        
+ Min.   :-2.518   Min.   :-3.9483  
+ 1st Qu.:-1.902   1st Qu.: 0.7389  
+ Median :-1.776   Median : 1.2292  
+ Mean   :-1.770   Mean   : 1.1714  
+ 3rd Qu.:-1.651   3rd Qu.: 1.7004  
+ Max.   : 2.000   Max.   : 3.9189  </code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="lectura-de-datos.html#cb18-1" tabindex="-1"></a>init <span class="ot">=</span> beta_post[<span class="dv">1</span>,]</span>
+<span id="cb18-2"><a href="lectura-de-datos.html#cb18-2" tabindex="-1"></a>postmean <span class="ot">=</span> <span class="fu">apply</span>(beta_post[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>),], <span class="dv">2</span>, mean)</span>
+<span id="cb18-3"><a href="lectura-de-datos.html#cb18-3" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Media posterior</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">round</span>(postmean, <span class="dv">2</span>))</span></code></pre></div>
+<pre><code>Media posterior
+ -1.78 1.22</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="lectura-de-datos.html#cb20-1" tabindex="-1"></a><span class="fu">plot</span>(beta_post, <span class="at">pch=</span><span class="dv">19</span>, <span class="at">col=</span><span class="fu">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="fl">0.05</span>), <span class="at">xlab=</span><span class="fu">expression</span>(beta[<span class="dv">0</span>]), <span class="at">ylab=</span><span class="fu">expression</span>(beta[<span class="dv">1</span>]), <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="fl">2.5</span>,<span class="fl">2.5</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="fl">4.5</span>,<span class="fl">4.5</span>))</span>
+<span id="cb20-2"><a href="lectura-de-datos.html#cb20-2" tabindex="-1"></a><span class="fu">points</span>(init[<span class="dv">1</span>], init[<span class="dv">2</span>], <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">pch=</span><span class="dv">19</span>)</span>
+<span id="cb20-3"><a href="lectura-de-datos.html#cb20-3" tabindex="-1"></a><span class="fu">points</span>(postmean[<span class="dv">1</span>], postmean[<span class="dv">2</span>], <span class="at">col=</span><span class="st">&quot;orange&quot;</span>, <span class="at">pch=</span><span class="dv">19</span>)</span>
+<span id="cb20-4"><a href="lectura-de-datos.html#cb20-4" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="at">col=</span><span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;orange&quot;</span>), <span class="at">legend=</span><span class="fu">c</span>(<span class="st">&quot;Initial value&quot;</span>, <span class="st">&quot;Post. mean&quot;</span>), <span class="at">pch=</span><span class="dv">19</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="lectura-de-datos.html#cb21-1" tabindex="-1"></a><span class="fu">plot</span>(beta_post[,<span class="dv">2</span>], <span class="at">type=</span><span class="st">&#39;l&#39;</span>,  <span class="at">ylab=</span><span class="fu">expression</span>(beta[<span class="dv">1</span>]), <span class="at">xlab=</span><span class="st">&quot;Iteration&quot;</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>))</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="lectura-de-datos.html#cb22-1" tabindex="-1"></a><span class="fu">plot</span>(rd, <span class="at">type=</span><span class="st">&#39;l&#39;</span>,  <span class="at">ylab=</span><span class="st">&quot;RD*1000&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Iteration&quot;</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>))</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-8-2.png" width="672" /></p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="lectura-de-datos.html#cb23-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(beta_post[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>),<span class="dv">2</span>]), <span class="at">xlab=</span><span class="fu">expression</span>(beta[<span class="dv">1</span>]), <span class="at">ylab=</span><span class="st">&quot;Density&quot;</span>, <span class="at">main=</span><span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-8-3.png" width="672" /></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="lectura-de-datos.html#cb24-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(rd[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>)]), <span class="at">xlab=</span><span class="st">&quot;RD*1000&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;Density&quot;</span>, <span class="at">main=</span><span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-8-4.png" width="672" /></p>
+<p>Los gráficos anteriores nos proporcionan una forma visual de seguir cómo cambia el valor de <code>beta1</code>, que es el parámetro clave en este modelo estadístico(exposición), a medida que avanzamos en nuestros cálculos. Tenemos dos líneas en cada gráfico: una para el método “Rand. walk” (caminata aleatoria) y otra para “Guided” (guiado).</p>
+<p>En el primer gráfico, nos enfocamos en las primeras 200 iteraciones. Las líneas que representan “Rand. walk” se muestran en un color oscuro, mientras que las de “Guided” se muestran en un color más claro.</p>
+<p>El segundo gráfico se centra en las últimas 200 iteraciones de nuestros cálculos.</p>
+<p>Estos gráficos nos ayudan a entender cómo las cadenas de números evolucionan y se estabilizan a medida que avanzamos. Nos ayudan a evaluar si los métodos utilizados en los códigos anteriores están funcionando de manera efectiva y si las estimaciones que obtenemos son confiables y consistentes.</p>
+</div>
+</div>
+<div id="metrópolis-guiada" class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> Metrópolis guiada<a href="lectura-de-datos.html#metrópolis-guiada" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Este código implementa un algoritmo de Metropolis-Hastings para explorar el espacio de parámetros de un modelo estadístico y estimar la distribución posterior de los parámetros <span class="math inline">\(\beta_0\)</span> y <span class="math inline">\(\beta_1\)</span>, así como calcular el riesgo diferencial en cada iteración. La dirección en la que se generan las propuestas se invierte periódicamente para mejorar la exploración del espacio de parámetros.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="lectura-de-datos.html#cb25-1" tabindex="-1"></a><span class="co"># inicializacion</span></span>
+<span id="cb25-2"><a href="lectura-de-datos.html#cb25-2" tabindex="-1"></a>M<span class="ot">=</span><span class="dv">10000</span></span>
+<span id="cb25-3"><a href="lectura-de-datos.html#cb25-3" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">91828</span>)</span>
+<span id="cb25-4"><a href="lectura-de-datos.html#cb25-4" tabindex="-1"></a>beta_post_guide <span class="ot">=</span> <span class="fu">matrix</span>(<span class="at">nrow=</span>M, <span class="at">ncol=</span><span class="dv">2</span>)</span>
+<span id="cb25-5"><a href="lectura-de-datos.html#cb25-5" tabindex="-1"></a><span class="fu">colnames</span>(beta_post_guide) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&#39;beta0&#39;</span>, <span class="st">&#39;beta1&#39;</span>)</span>
+<span id="cb25-6"><a href="lectura-de-datos.html#cb25-6" tabindex="-1"></a>accept <span class="ot">=</span> <span class="fu">numeric</span>(M)</span>
+<span id="cb25-7"><a href="lectura-de-datos.html#cb25-7" tabindex="-1"></a>rd_guide <span class="ot">=</span> <span class="fu">numeric</span>(M)</span>
+<span id="cb25-8"><a href="lectura-de-datos.html#cb25-8" tabindex="-1"></a>beta_post_guide[<span class="dv">1</span>,] <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="sc">-</span><span class="dv">3</span>)</span>
+<span id="cb25-9"><a href="lectura-de-datos.html#cb25-9" tabindex="-1"></a>rd_guide[<span class="dv">1</span>] <span class="ot">=</span> <span class="fu">riskdifference</span>(y,x,beta_post_guide[<span class="dv">1</span>,])</span>
+<span id="cb25-10"><a href="lectura-de-datos.html#cb25-10" tabindex="-1"></a>accept[<span class="dv">1</span>] <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb25-11"><a href="lectura-de-datos.html#cb25-11" tabindex="-1"></a>dir <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb25-12"><a href="lectura-de-datos.html#cb25-12" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>M){</span>
+<span id="cb25-13"><a href="lectura-de-datos.html#cb25-13" tabindex="-1"></a>  oldb <span class="ot">=</span> beta_post_guide[i<span class="dv">-1</span>,]</span>
+<span id="cb25-14"><a href="lectura-de-datos.html#cb25-14" tabindex="-1"></a>  prop <span class="ot">=</span> dir<span class="sc">*</span><span class="fu">abs</span>(<span class="fu">rnorm</span>(<span class="dv">2</span>, <span class="at">sd=</span><span class="fl">0.2</span>))</span>
+<span id="cb25-15"><a href="lectura-de-datos.html#cb25-15" tabindex="-1"></a>  newb <span class="ot">=</span> oldb<span class="sc">+</span>prop</span>
+<span id="cb25-16"><a href="lectura-de-datos.html#cb25-16" tabindex="-1"></a>  num <span class="ot">=</span> <span class="fu">loglik</span>(y,x,newb)</span>
+<span id="cb25-17"><a href="lectura-de-datos.html#cb25-17" tabindex="-1"></a>  den <span class="ot">=</span> <span class="fu">loglik</span>(y,x,oldb)</span>
+<span id="cb25-18"><a href="lectura-de-datos.html#cb25-18" tabindex="-1"></a>  acceptprob <span class="ot">=</span> <span class="fu">exp</span>(num<span class="sc">-</span>den)</span>
+<span id="cb25-19"><a href="lectura-de-datos.html#cb25-19" tabindex="-1"></a>  acc <span class="ot">=</span> (acceptprob <span class="sc">&gt;</span> <span class="fu">runif</span>(<span class="dv">1</span>))</span>
+<span id="cb25-20"><a href="lectura-de-datos.html#cb25-20" tabindex="-1"></a>  <span class="cf">if</span>(acc){</span>
+<span id="cb25-21"><a href="lectura-de-datos.html#cb25-21" tabindex="-1"></a>    beta_post_guide[i,] <span class="ot">=</span> newb </span>
+<span id="cb25-22"><a href="lectura-de-datos.html#cb25-22" tabindex="-1"></a>    accept[i] <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb25-23"><a href="lectura-de-datos.html#cb25-23" tabindex="-1"></a>  }<span class="cf">else</span>{</span>
+<span id="cb25-24"><a href="lectura-de-datos.html#cb25-24" tabindex="-1"></a>    beta_post_guide[i,] <span class="ot">=</span> oldb </span>
+<span id="cb25-25"><a href="lectura-de-datos.html#cb25-25" tabindex="-1"></a>    accept[i] <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb25-26"><a href="lectura-de-datos.html#cb25-26" tabindex="-1"></a>    dir <span class="ot">=</span> dir<span class="sc">*-</span><span class="dv">1</span></span>
+<span id="cb25-27"><a href="lectura-de-datos.html#cb25-27" tabindex="-1"></a>  }</span>
+<span id="cb25-28"><a href="lectura-de-datos.html#cb25-28" tabindex="-1"></a>  rd_guide[i] <span class="ot">=</span> <span class="dv">1000</span><span class="sc">*</span><span class="fu">riskdifference</span>(y,x,beta_post_guide[i,])</span>
+<span id="cb25-29"><a href="lectura-de-datos.html#cb25-29" tabindex="-1"></a>}</span>
+<span id="cb25-30"><a href="lectura-de-datos.html#cb25-30" tabindex="-1"></a></span>
+<span id="cb25-31"><a href="lectura-de-datos.html#cb25-31" tabindex="-1"></a>postmean <span class="ot">=</span> <span class="fu">apply</span>(beta_post_guide[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>),], <span class="dv">2</span>, mean)</span>
+<span id="cb25-32"><a href="lectura-de-datos.html#cb25-32" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Media posterior, guiada</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">round</span>(postmean, <span class="dv">2</span>))</span></code></pre></div>
+<pre><code>Media posterior, guiada
+ -1.8 1.41</code></pre>
+</div>
+<div id="contraste-de-salida-con-caminata-aleatoria" class="section level2 hasAnchor" number="2.5">
+<h2><span class="header-section-number">2.5</span> Contraste de salida con caminata aleatoria<a href="lectura-de-datos.html#contraste-de-salida-con-caminata-aleatoria" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="lectura-de-datos.html#cb27-1" tabindex="-1"></a>col1 <span class="ot">=</span> <span class="fu">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,.<span class="dv">5</span>)</span>
+<span id="cb27-2"><a href="lectura-de-datos.html#cb27-2" tabindex="-1"></a>col2 <span class="ot">=</span> <span class="fu">rgb</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,.<span class="dv">35</span>)</span>
+<span id="cb27-3"><a href="lectura-de-datos.html#cb27-3" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfcol=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb27-4"><a href="lectura-de-datos.html#cb27-4" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="lectura-de-datos.html#cb27-5" tabindex="-1"></a><span class="co">#trace plots</span></span>
+<span id="cb27-6"><a href="lectura-de-datos.html#cb27-6" tabindex="-1"></a><span class="fu">plot</span>(beta_post[<span class="dv">1</span><span class="sc">:</span><span class="dv">200</span>,<span class="dv">2</span>], <span class="at">type=</span><span class="st">&#39;l&#39;</span>,  <span class="at">ylab=</span><span class="fu">expression</span>(beta[<span class="dv">1</span>]), <span class="at">xlab=</span><span class="st">&quot;Iteration&quot;</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>), <span class="at">col=</span>col1)</span>
+<span id="cb27-7"><a href="lectura-de-datos.html#cb27-7" tabindex="-1"></a><span class="fu">lines</span>(beta_post_guide[<span class="dv">1</span><span class="sc">:</span><span class="dv">200</span>,<span class="dv">2</span>], <span class="at">col=</span>col2)</span>
+<span id="cb27-8"><a href="lectura-de-datos.html#cb27-8" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="at">lty=</span><span class="dv">1</span>, <span class="at">col=</span><span class="fu">c</span>(col1, col2), <span class="at">legend=</span><span class="fu">c</span>(<span class="st">&quot;Rand. walk&quot;</span>, <span class="st">&quot;Guided&quot;</span>))</span>
+<span id="cb27-9"><a href="lectura-de-datos.html#cb27-9" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">9800</span><span class="sc">:</span><span class="dv">10000</span>, beta_post[<span class="dv">9800</span><span class="sc">:</span><span class="dv">10000</span>,<span class="dv">2</span>], <span class="at">type=</span><span class="st">&#39;l&#39;</span>,  <span class="at">ylab=</span><span class="fu">expression</span>(beta[<span class="dv">1</span>]), <span class="at">xlab=</span><span class="st">&quot;Iteration&quot;</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>), <span class="at">col=</span>col1)</span>
+<span id="cb27-10"><a href="lectura-de-datos.html#cb27-10" tabindex="-1"></a><span class="fu">lines</span>(<span class="dv">9800</span><span class="sc">:</span><span class="dv">10000</span>, beta_post_guide[<span class="dv">9800</span><span class="sc">:</span><span class="dv">10000</span>,<span class="dv">2</span>], <span class="at">col=</span>col2)</span>
+<span id="cb27-11"><a href="lectura-de-datos.html#cb27-11" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="at">lty=</span><span class="dv">1</span>, <span class="at">col=</span><span class="fu">c</span>(col1, col2), <span class="at">legend=</span><span class="fu">c</span>(<span class="st">&quot;Rand. walk&quot;</span>, <span class="st">&quot;Guided&quot;</span>))</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="lectura-de-datos.html#cb28-1" tabindex="-1"></a><span class="co"># density plots</span></span>
+<span id="cb28-2"><a href="lectura-de-datos.html#cb28-2" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(beta_post_guide[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>),<span class="dv">2</span>]), <span class="at">col=</span>col2, <span class="at">xlab=</span><span class="fu">expression</span>(beta[<span class="dv">1</span>]), <span class="at">ylab=</span><span class="st">&quot;Density&quot;</span>, <span class="at">main=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb28-3"><a href="lectura-de-datos.html#cb28-3" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">density</span>(beta_post[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>),<span class="dv">2</span>]), <span class="at">col=</span>col1)</span>
+<span id="cb28-4"><a href="lectura-de-datos.html#cb28-4" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;bottomright&quot;</span>, <span class="at">lty=</span><span class="dv">1</span>, <span class="at">col=</span><span class="fu">c</span>(col1, col2), <span class="at">legend=</span><span class="fu">c</span>(<span class="st">&quot;Rand. walk&quot;</span>, <span class="st">&quot;Guided&quot;</span>))</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="lectura-de-datos.html#cb29-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(rd_guide[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>)]), <span class="at">xlab=</span><span class="st">&quot;RD*1000&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;Density&quot;</span>, <span class="at">main=</span><span class="st">&quot;&quot;</span>, <span class="at">col=</span>col2)</span>
+<span id="cb29-2"><a href="lectura-de-datos.html#cb29-2" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">density</span>(rd[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>)]), <span class="at">col=</span>col1)</span>
+<span id="cb29-3"><a href="lectura-de-datos.html#cb29-3" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="at">lty=</span><span class="dv">1</span>, <span class="at">col=</span><span class="fu">c</span>(col1, col2), <span class="at">legend=</span><span class="fu">c</span>(<span class="st">&quot;Rand. walk&quot;</span>, <span class="st">&quot;Guided&quot;</span>))</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="lectura-de-datos.html#cb30-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfcol=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code></pre></div>
+<p>Los gráficos de densidad obtenidos muestran las distribuciones de probabilidad de los datos de beta1 uno generado por el método Metropolis-Hastings (Random Walk) y otro por el método Metropolis-Guided. En el primer gráfico, se compara la densidad de la variable beta[1] entre ambas cadenas, donde "col1" representa la cadena Metropolis-Hastings y "col2" la cadena Metropolis-Guided.</p>
+<p>El segundo gráfico muestra la densidad de la variable "RD" multiplicada por 1000, y nuevamente compara las dos cadenas.</p>
+<p>Con esto podemos visualizar cómo difieren las distribuciones de probabilidad entre los dos métodos y evaluar si el método Metropolis-Guided logra converger hacia una distribución más centrada en comparación con Metropolis-Hastings. Basicamente lo que hace es evaluar la eficiencia de ambos metodos e inferir cual podría ser más certero a la hora de eficiencia y convergencia en sus estimaciones.</p>
+</div>
+<div id="algoritmo-de-metrópolis-guiado-y-adaptativo" class="section level2 hasAnchor" number="2.6">
+<h2><span class="header-section-number">2.6</span> Algoritmo de metrópolis guiado y adaptativo<a href="lectura-de-datos.html#algoritmo-de-metrópolis-guiado-y-adaptativo" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Similar al caso anterior también se implementa un algoritmo de Metropolis-Hastings para estimar parámetros de un modelo estadístico. Sin embargo, este código agrega la adaptación de la desviación estándar de las propuestas de parámetros.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="lectura-de-datos.html#cb31-1" tabindex="-1"></a><span class="co"># initialize</span></span>
+<span id="cb31-2"><a href="lectura-de-datos.html#cb31-2" tabindex="-1"></a>M<span class="ot">=</span><span class="dv">10000</span></span>
+<span id="cb31-3"><a href="lectura-de-datos.html#cb31-3" tabindex="-1"></a>burnin<span class="ot">=</span><span class="dv">1000</span></span>
+<span id="cb31-4"><a href="lectura-de-datos.html#cb31-4" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">91828</span>)</span>
+<span id="cb31-5"><a href="lectura-de-datos.html#cb31-5" tabindex="-1"></a>beta_post_adaptguide <span class="ot">=</span> <span class="fu">matrix</span>(<span class="at">nrow=</span>M<span class="sc">+</span>burnin, <span class="at">ncol=</span><span class="dv">2</span>)</span>
+<span id="cb31-6"><a href="lectura-de-datos.html#cb31-6" tabindex="-1"></a><span class="fu">colnames</span>(beta_post_adaptguide) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&#39;beta0&#39;</span>, <span class="st">&#39;beta1&#39;</span>)</span>
+<span id="cb31-7"><a href="lectura-de-datos.html#cb31-7" tabindex="-1"></a>accept <span class="ot">=</span> <span class="fu">numeric</span>(M<span class="sc">+</span>burnin)</span>
+<span id="cb31-8"><a href="lectura-de-datos.html#cb31-8" tabindex="-1"></a>rd_adaptguide <span class="ot">=</span> <span class="fu">numeric</span>(M<span class="sc">+</span>burnin)</span>
+<span id="cb31-9"><a href="lectura-de-datos.html#cb31-9" tabindex="-1"></a>beta_post_adaptguide[<span class="dv">1</span>,] <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="sc">-</span><span class="dv">3</span>)</span>
+<span id="cb31-10"><a href="lectura-de-datos.html#cb31-10" tabindex="-1"></a>rd_adaptguide[<span class="dv">1</span>] <span class="ot">=</span> <span class="fu">riskdifference</span>(y,x,beta_post[<span class="dv">1</span>,])</span>
+<span id="cb31-11"><a href="lectura-de-datos.html#cb31-11" tabindex="-1"></a>accept[<span class="dv">1</span>] <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb31-12"><a href="lectura-de-datos.html#cb31-12" tabindex="-1"></a>prop.sigma <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.2</span>)</span>
+<span id="cb31-13"><a href="lectura-de-datos.html#cb31-13" tabindex="-1"></a>dir <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb31-14"><a href="lectura-de-datos.html#cb31-14" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>(M<span class="sc">+</span>burnin)){</span>
+<span id="cb31-15"><a href="lectura-de-datos.html#cb31-15" tabindex="-1"></a>  <span class="cf">if</span>((i <span class="sc">&lt;</span> burnin) <span class="sc">&amp;</span> (i <span class="sc">&gt;</span> <span class="dv">25</span>)){</span>
+<span id="cb31-16"><a href="lectura-de-datos.html#cb31-16" tabindex="-1"></a>    prop.sigma <span class="ot">=</span> <span class="fu">apply</span>(beta_post_adaptguide[<span class="fu">max</span>(<span class="dv">1</span>, i<span class="dv">-100</span>)<span class="sc">:</span>(i<span class="dv">-1</span>),], <span class="dv">2</span>, sd)</span>
+<span id="cb31-17"><a href="lectura-de-datos.html#cb31-17" tabindex="-1"></a>  }</span>
+<span id="cb31-18"><a href="lectura-de-datos.html#cb31-18" tabindex="-1"></a>  oldb <span class="ot">=</span> beta_post_adaptguide[i<span class="dv">-1</span>,]</span>
+<span id="cb31-19"><a href="lectura-de-datos.html#cb31-19" tabindex="-1"></a>  prop <span class="ot">=</span> dir<span class="sc">*</span><span class="fu">abs</span>(<span class="fu">rnorm</span>(<span class="dv">2</span>, <span class="at">sd=</span>prop.sigma))</span>
+<span id="cb31-20"><a href="lectura-de-datos.html#cb31-20" tabindex="-1"></a>  newb <span class="ot">=</span> oldb<span class="sc">+</span>prop</span>
+<span id="cb31-21"><a href="lectura-de-datos.html#cb31-21" tabindex="-1"></a>  num <span class="ot">=</span> <span class="fu">loglik</span>(y,x,newb)</span>
+<span id="cb31-22"><a href="lectura-de-datos.html#cb31-22" tabindex="-1"></a>  den <span class="ot">=</span> <span class="fu">loglik</span>(y,x,oldb)</span>
+<span id="cb31-23"><a href="lectura-de-datos.html#cb31-23" tabindex="-1"></a>  acceptprob <span class="ot">=</span> <span class="fu">exp</span>(num<span class="sc">-</span>den)</span>
+<span id="cb31-24"><a href="lectura-de-datos.html#cb31-24" tabindex="-1"></a>  acc <span class="ot">=</span> (acceptprob <span class="sc">&gt;</span> <span class="fu">runif</span>(<span class="dv">1</span>))</span>
+<span id="cb31-25"><a href="lectura-de-datos.html#cb31-25" tabindex="-1"></a>  <span class="cf">if</span>(acc){</span>
+<span id="cb31-26"><a href="lectura-de-datos.html#cb31-26" tabindex="-1"></a>    beta_post_adaptguide[i,] <span class="ot">=</span> newb </span>
+<span id="cb31-27"><a href="lectura-de-datos.html#cb31-27" tabindex="-1"></a>    accept[i] <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb31-28"><a href="lectura-de-datos.html#cb31-28" tabindex="-1"></a>  }<span class="cf">else</span>{</span>
+<span id="cb31-29"><a href="lectura-de-datos.html#cb31-29" tabindex="-1"></a>    beta_post_adaptguide[i,] <span class="ot">=</span> oldb </span>
+<span id="cb31-30"><a href="lectura-de-datos.html#cb31-30" tabindex="-1"></a>    accept[i] <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb31-31"><a href="lectura-de-datos.html#cb31-31" tabindex="-1"></a>    dir <span class="ot">=</span> dir<span class="sc">*-</span><span class="dv">1</span></span>
+<span id="cb31-32"><a href="lectura-de-datos.html#cb31-32" tabindex="-1"></a>  }</span>
+<span id="cb31-33"><a href="lectura-de-datos.html#cb31-33" tabindex="-1"></a>  rd_adaptguide[i] <span class="ot">=</span> <span class="dv">1000</span><span class="sc">*</span><span class="fu">riskdifference</span>(y,x,beta_post_adaptguide[i,])</span>
+<span id="cb31-34"><a href="lectura-de-datos.html#cb31-34" tabindex="-1"></a>}</span>
+<span id="cb31-35"><a href="lectura-de-datos.html#cb31-35" tabindex="-1"></a>postmean <span class="ot">=</span> <span class="fu">apply</span>(beta_post_adaptguide[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>),], <span class="dv">2</span>, mean)</span>
+<span id="cb31-36"><a href="lectura-de-datos.html#cb31-36" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Media posterior, guiada y adaptativa</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">round</span>(postmean, <span class="dv">2</span>))</span></code></pre></div>
+<pre><code>Media posterior, guiada y adaptativa
+ -1.78 1.22</code></pre>
+<p>Adaptación de la desviación estándar de las propuestas:</p>
+<p>En cada iteración (después de la fase de “quemado”), se adapta la desviación estándar de las propuestas (prop.sigma) basándose en las últimas 100 observaciones de beta_post_adaptguide. Esto ayuda a ajustar la amplitud de las propuestas de manera adaptativa para explorar mejor el espacio de parámetros.</p>
+<p>En cada iteración, se genera una nueva propuesta (newb) añadiendo ruido aleatorio a los parámetros anteriores (oldb) en función de la desviación estándar adaptada prop.sigma.</p>
+</div>
+<div id="salida-contrastante" class="section level2 hasAnchor" number="2.7">
+<h2><span class="header-section-number">2.7</span> Salida contrastante<a href="lectura-de-datos.html#salida-contrastante" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="lectura-de-datos.html#cb33-1" tabindex="-1"></a>col1 <span class="ot">=</span> <span class="fu">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,.<span class="dv">5</span>)</span>
+<span id="cb33-2"><a href="lectura-de-datos.html#cb33-2" tabindex="-1"></a>col2 <span class="ot">=</span> <span class="fu">rgb</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,.<span class="dv">35</span>)</span>
+<span id="cb33-3"><a href="lectura-de-datos.html#cb33-3" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfcol=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb33-4"><a href="lectura-de-datos.html#cb33-4" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="lectura-de-datos.html#cb33-5" tabindex="-1"></a><span class="co">#trace plots</span></span>
+<span id="cb33-6"><a href="lectura-de-datos.html#cb33-6" tabindex="-1"></a><span class="fu">plot</span>(beta_post[<span class="dv">1</span><span class="sc">:</span><span class="dv">200</span>,<span class="dv">2</span>], <span class="at">type=</span><span class="st">&#39;l&#39;</span>,  <span class="at">ylab=</span><span class="fu">expression</span>(beta[<span class="dv">1</span>]), <span class="at">xlab=</span><span class="st">&quot;Iteration&quot;</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>), <span class="at">col=</span>col1)</span>
+<span id="cb33-7"><a href="lectura-de-datos.html#cb33-7" tabindex="-1"></a><span class="fu">lines</span>(beta_post_adaptguide[<span class="dv">1</span><span class="sc">:</span><span class="dv">200</span>,<span class="dv">2</span>], <span class="at">col=</span>col2)</span>
+<span id="cb33-8"><a href="lectura-de-datos.html#cb33-8" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="at">lty=</span><span class="dv">1</span>, <span class="at">col=</span><span class="fu">c</span>(col1, col2), <span class="at">legend=</span><span class="fu">c</span>(<span class="st">&quot;Rand. walk&quot;</span>, <span class="st">&quot;Guided, adaptive&quot;</span>))</span>
+<span id="cb33-9"><a href="lectura-de-datos.html#cb33-9" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">9800</span><span class="sc">:</span><span class="dv">10000</span>, beta_post[<span class="dv">9800</span><span class="sc">:</span><span class="dv">10000</span>,<span class="dv">2</span>], <span class="at">type=</span><span class="st">&#39;l&#39;</span>,  <span class="at">ylab=</span><span class="fu">expression</span>(beta[<span class="dv">1</span>]), <span class="at">xlab=</span><span class="st">&quot;Iteration&quot;</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>), <span class="at">col=</span>col1)</span>
+<span id="cb33-10"><a href="lectura-de-datos.html#cb33-10" tabindex="-1"></a><span class="fu">lines</span>(<span class="dv">9800</span><span class="sc">:</span><span class="dv">10000</span>, beta_post_adaptguide[<span class="dv">9800</span><span class="sc">:</span><span class="dv">10000</span>,<span class="dv">2</span>], <span class="at">col=</span>col2)</span>
+<span id="cb33-11"><a href="lectura-de-datos.html#cb33-11" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="at">lty=</span><span class="dv">1</span>, <span class="at">col=</span><span class="fu">c</span>(col1, col2), <span class="at">legend=</span><span class="fu">c</span>(<span class="st">&quot;Rand. walk&quot;</span>, <span class="st">&quot;Guided, adaptive&quot;</span>))</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="lectura-de-datos.html#cb34-1" tabindex="-1"></a><span class="co"># density plots</span></span>
+<span id="cb34-2"><a href="lectura-de-datos.html#cb34-2" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(beta_post_adaptguide[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>),<span class="dv">2</span>]), <span class="at">col=</span>col2, <span class="at">xlab=</span><span class="fu">expression</span>(beta[<span class="dv">1</span>]), <span class="at">ylab=</span><span class="st">&quot;Density&quot;</span>, <span class="at">main=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb34-3"><a href="lectura-de-datos.html#cb34-3" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">density</span>(beta_post[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>),<span class="dv">2</span>]), <span class="at">col=</span>col1)</span>
+<span id="cb34-4"><a href="lectura-de-datos.html#cb34-4" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;bottomright&quot;</span>, <span class="at">lty=</span><span class="dv">1</span>, <span class="at">col=</span><span class="fu">c</span>(col1, col2), <span class="at">legend=</span><span class="fu">c</span>(<span class="st">&quot;Rand. walk&quot;</span>, <span class="st">&quot;Guided, adaptive&quot;</span>))</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="lectura-de-datos.html#cb35-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(rd_adaptguide[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>)]), <span class="at">xlab=</span><span class="st">&quot;RD*1000&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;Density&quot;</span>, <span class="at">main=</span><span class="st">&quot;&quot;</span>, <span class="at">col=</span>col2)</span>
+<span id="cb35-2"><a href="lectura-de-datos.html#cb35-2" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">density</span>(rd[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>)]), <span class="at">col=</span>col1)</span>
+<span id="cb35-3"><a href="lectura-de-datos.html#cb35-3" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="at">lty=</span><span class="dv">1</span>, <span class="at">col=</span><span class="fu">c</span>(col1, col2), <span class="at">legend=</span><span class="fu">c</span>(<span class="st">&quot;Rand. walk&quot;</span>, <span class="st">&quot;Guided, adaptive&quot;</span>))</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-14-2.png" width="672" /></p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="lectura-de-datos.html#cb36-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfcol=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code></pre></div>
+<p>Los gráficos resultantes permiten comparar las dos cadenas de Markov en función de sus primeras 200 iteraciones, mostrando cómo difieren a lo largo de este período.</p>
+</div>
+<div id="algoritmo-de-metrópolis-guiado-y-adaptativo-utilizando-priores-normales" class="section level2 hasAnchor" number="2.8">
+<h2><span class="header-section-number">2.8</span> Algoritmo de metrópolis guiado y adaptativo utilizando priores normales<a href="lectura-de-datos.html#algoritmo-de-metrópolis-guiado-y-adaptativo-utilizando-priores-normales" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Este es una variación del algoritmo de Metropolis-Hastings que considera tanto la función de verosimilitud como las distribuciones de prioridad en los cálculos, y muestra la media posterior estimada después de la fase de “burn-in”.</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="lectura-de-datos.html#cb37-1" tabindex="-1"></a><span class="co"># inicializacion</span></span>
+<span id="cb37-2"><a href="lectura-de-datos.html#cb37-2" tabindex="-1"></a>M<span class="ot">=</span><span class="dv">10000</span></span>
+<span id="cb37-3"><a href="lectura-de-datos.html#cb37-3" tabindex="-1"></a>burnin<span class="ot">=</span><span class="dv">1000</span></span>
+<span id="cb37-4"><a href="lectura-de-datos.html#cb37-4" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">91828</span>)</span>
+<span id="cb37-5"><a href="lectura-de-datos.html#cb37-5" tabindex="-1"></a>beta_post_adaptguide2 <span class="ot">=</span> <span class="fu">matrix</span>(<span class="at">nrow=</span>M<span class="sc">+</span>burnin, <span class="at">ncol=</span><span class="dv">2</span>)</span>
+<span id="cb37-6"><a href="lectura-de-datos.html#cb37-6" tabindex="-1"></a><span class="fu">colnames</span>(beta_post_adaptguide2) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&#39;beta0&#39;</span>, <span class="st">&#39;beta1&#39;</span>)</span>
+<span id="cb37-7"><a href="lectura-de-datos.html#cb37-7" tabindex="-1"></a>accept <span class="ot">=</span> <span class="fu">numeric</span>(M<span class="sc">+</span>burnin)</span>
+<span id="cb37-8"><a href="lectura-de-datos.html#cb37-8" tabindex="-1"></a>rd_adaptguide2 <span class="ot">=</span> <span class="fu">numeric</span>(M<span class="sc">+</span>burnin)</span>
+<span id="cb37-9"><a href="lectura-de-datos.html#cb37-9" tabindex="-1"></a>beta_post_adaptguide2[<span class="dv">1</span>,] <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="sc">-</span><span class="dv">3</span>)</span>
+<span id="cb37-10"><a href="lectura-de-datos.html#cb37-10" tabindex="-1"></a>rd_adaptguide2[<span class="dv">1</span>] <span class="ot">=</span> <span class="fu">riskdifference</span>(y,x,beta_post[<span class="dv">1</span>,])</span>
+<span id="cb37-11"><a href="lectura-de-datos.html#cb37-11" tabindex="-1"></a>accept[<span class="dv">1</span>] <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb37-12"><a href="lectura-de-datos.html#cb37-12" tabindex="-1"></a>prop.sigma <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.2</span>)</span>
+<span id="cb37-13"><a href="lectura-de-datos.html#cb37-13" tabindex="-1"></a>dir <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb37-14"><a href="lectura-de-datos.html#cb37-14" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>(M<span class="sc">+</span>burnin)){</span>
+<span id="cb37-15"><a href="lectura-de-datos.html#cb37-15" tabindex="-1"></a>  <span class="cf">if</span>((i <span class="sc">&lt;</span> burnin) <span class="sc">&amp;</span> (i <span class="sc">&gt;</span> <span class="dv">25</span>)){</span>
+<span id="cb37-16"><a href="lectura-de-datos.html#cb37-16" tabindex="-1"></a>    prop.sigma <span class="ot">=</span> <span class="fu">apply</span>(beta_post_adaptguide2[<span class="fu">max</span>(<span class="dv">1</span>, i<span class="dv">-100</span>)<span class="sc">:</span>(i<span class="dv">-1</span>),], <span class="dv">2</span>, sd)</span>
+<span id="cb37-17"><a href="lectura-de-datos.html#cb37-17" tabindex="-1"></a>  }</span>
+<span id="cb37-18"><a href="lectura-de-datos.html#cb37-18" tabindex="-1"></a>  oldb <span class="ot">=</span> beta_post_adaptguide2[i<span class="dv">-1</span>,]</span>
+<span id="cb37-19"><a href="lectura-de-datos.html#cb37-19" tabindex="-1"></a>  prop <span class="ot">=</span> dir<span class="sc">*</span><span class="fu">abs</span>(<span class="fu">rnorm</span>(<span class="dv">2</span>, <span class="at">sd=</span>prop.sigma))</span>
+<span id="cb37-20"><a href="lectura-de-datos.html#cb37-20" tabindex="-1"></a>  newb <span class="ot">=</span> oldb<span class="sc">+</span>prop</span>
+<span id="cb37-21"><a href="lectura-de-datos.html#cb37-21" tabindex="-1"></a>  num <span class="ot">=</span> <span class="fu">loglik</span>(y,x,newb) <span class="sc">+</span> <span class="fu">dnorm</span>(newb[<span class="dv">1</span>], <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">100</span>), <span class="at">log=</span><span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">dnorm</span>(newb[<span class="dv">2</span>], <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="fl">0.5</span>), <span class="at">log=</span><span class="cn">TRUE</span>)</span>
+<span id="cb37-22"><a href="lectura-de-datos.html#cb37-22" tabindex="-1"></a>  den <span class="ot">=</span> <span class="fu">loglik</span>(y,x,oldb) <span class="sc">+</span> <span class="fu">dnorm</span>(oldb[<span class="dv">1</span>], <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">100</span>), <span class="at">log=</span><span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">dnorm</span>(oldb[<span class="dv">2</span>], <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="fl">0.5</span>), <span class="at">log=</span><span class="cn">TRUE</span>)</span>
+<span id="cb37-23"><a href="lectura-de-datos.html#cb37-23" tabindex="-1"></a>  acceptprob <span class="ot">=</span> <span class="fu">exp</span>(num<span class="sc">-</span>den)</span>
+<span id="cb37-24"><a href="lectura-de-datos.html#cb37-24" tabindex="-1"></a>  acc <span class="ot">=</span> (acceptprob <span class="sc">&gt;</span> <span class="fu">runif</span>(<span class="dv">1</span>))</span>
+<span id="cb37-25"><a href="lectura-de-datos.html#cb37-25" tabindex="-1"></a>  <span class="cf">if</span>(acc){</span>
+<span id="cb37-26"><a href="lectura-de-datos.html#cb37-26" tabindex="-1"></a>    beta_post_adaptguide2[i,] <span class="ot">=</span> newb </span>
+<span id="cb37-27"><a href="lectura-de-datos.html#cb37-27" tabindex="-1"></a>    accept[i] <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb37-28"><a href="lectura-de-datos.html#cb37-28" tabindex="-1"></a>  }<span class="cf">else</span>{</span>
+<span id="cb37-29"><a href="lectura-de-datos.html#cb37-29" tabindex="-1"></a>    beta_post_adaptguide2[i,] <span class="ot">=</span> oldb </span>
+<span id="cb37-30"><a href="lectura-de-datos.html#cb37-30" tabindex="-1"></a>    accept[i] <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb37-31"><a href="lectura-de-datos.html#cb37-31" tabindex="-1"></a>    dir <span class="ot">=</span> dir<span class="sc">*-</span><span class="dv">1</span></span>
+<span id="cb37-32"><a href="lectura-de-datos.html#cb37-32" tabindex="-1"></a>  }</span>
+<span id="cb37-33"><a href="lectura-de-datos.html#cb37-33" tabindex="-1"></a>  rd_adaptguide2[i] <span class="ot">=</span> <span class="dv">1000</span><span class="sc">*</span><span class="fu">riskdifference</span>(y,x,beta_post_adaptguide2[i,])</span>
+<span id="cb37-34"><a href="lectura-de-datos.html#cb37-34" tabindex="-1"></a>}</span>
+<span id="cb37-35"><a href="lectura-de-datos.html#cb37-35" tabindex="-1"></a>postmean <span class="ot">=</span> <span class="fu">apply</span>(beta_post_adaptguide2[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>),], <span class="dv">2</span>, mean)</span>
+<span id="cb37-36"><a href="lectura-de-datos.html#cb37-36" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Media posterior, guiada y adaptativa</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">round</span>(postmean, <span class="dv">2</span>))</span></code></pre></div>
+<pre><code>Media posterior, guiada y adaptativa
+ -1.75 0.54</code></pre>
+<div id="inspeccion-de-salida" class="section level3 hasAnchor" number="2.8.1">
+<h3><span class="header-section-number">2.8.1</span> Inspeccion de salida<a href="lectura-de-datos.html#inspeccion-de-salida" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="lectura-de-datos.html#cb39-1" tabindex="-1"></a><span class="fu">mean</span>(accept)</span></code></pre></div>
+<pre><code>[1] 0.5552727</code></pre>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="lectura-de-datos.html#cb41-1" tabindex="-1"></a>init <span class="ot">=</span> beta_post_adaptguide[<span class="dv">1</span>,]</span>
+<span id="cb41-2"><a href="lectura-de-datos.html#cb41-2" tabindex="-1"></a>postmean <span class="ot">=</span> <span class="fu">apply</span>(beta_post_adaptguide[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>),], <span class="dv">2</span>, mean)</span>
+<span id="cb41-3"><a href="lectura-de-datos.html#cb41-3" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Media posterior, priores uniformes</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">round</span>(postmean, <span class="dv">2</span>))</span></code></pre></div>
+<pre><code>Media posterior, priores uniformes
+ -1.78 1.22</code></pre>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="lectura-de-datos.html#cb43-1" tabindex="-1"></a>init2 <span class="ot">=</span> beta_post_adaptguide2[<span class="dv">1</span>,]</span>
+<span id="cb43-2"><a href="lectura-de-datos.html#cb43-2" tabindex="-1"></a>postmean2 <span class="ot">=</span> <span class="fu">apply</span>(beta_post_adaptguide2[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>),], <span class="dv">2</span>, mean)</span>
+<span id="cb43-3"><a href="lectura-de-datos.html#cb43-3" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Media posterior, previas normales informativas</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="fu">round</span>(postmean2, <span class="dv">2</span>))</span></code></pre></div>
+<pre><code>Media posterior, previas normales informativas
+ -1.75 0.54</code></pre>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="lectura-de-datos.html#cb45-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfcol=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb45-2"><a href="lectura-de-datos.html#cb45-2" tabindex="-1"></a><span class="fu">plot</span>(beta_post_adaptguide, <span class="at">pch=</span><span class="dv">19</span>, <span class="at">col=</span><span class="fu">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="fl">0.05</span>), <span class="at">xlab=</span><span class="fu">expression</span>(beta[<span class="dv">0</span>]), <span class="at">ylab=</span><span class="fu">expression</span>(beta[<span class="dv">1</span>]), <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="fl">2.5</span>,<span class="fl">2.5</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="fl">4.5</span>,<span class="fl">4.5</span>), <span class="at">main=</span><span class="st">&quot;Uniform priors&quot;</span>)</span>
+<span id="cb45-3"><a href="lectura-de-datos.html#cb45-3" tabindex="-1"></a><span class="fu">points</span>(init[<span class="dv">1</span>], init[<span class="dv">2</span>], <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">pch=</span><span class="dv">19</span>)</span>
+<span id="cb45-4"><a href="lectura-de-datos.html#cb45-4" tabindex="-1"></a><span class="fu">points</span>(postmean[<span class="dv">1</span>], postmean[<span class="dv">2</span>], <span class="at">col=</span><span class="st">&quot;orange&quot;</span>, <span class="at">pch=</span><span class="dv">19</span>)</span>
+<span id="cb45-5"><a href="lectura-de-datos.html#cb45-5" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="at">col=</span><span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;orange&quot;</span>), <span class="at">legend=</span><span class="fu">c</span>(<span class="st">&quot;Initial value&quot;</span>, <span class="st">&quot;Post. mean&quot;</span>), <span class="at">pch=</span><span class="dv">19</span>)</span>
+<span id="cb45-6"><a href="lectura-de-datos.html#cb45-6" tabindex="-1"></a></span>
+<span id="cb45-7"><a href="lectura-de-datos.html#cb45-7" tabindex="-1"></a><span class="fu">plot</span>(beta_post_adaptguide2, <span class="at">pch=</span><span class="dv">19</span>, <span class="at">col=</span><span class="fu">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="fl">0.05</span>), <span class="at">xlab=</span><span class="fu">expression</span>(beta[<span class="dv">0</span>]), <span class="at">ylab=</span><span class="fu">expression</span>(beta[<span class="dv">1</span>]), <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="fl">2.5</span>,<span class="fl">2.5</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="fl">4.5</span>,<span class="fl">4.5</span>), <span class="at">main=</span><span class="st">&quot;Informative priors&quot;</span>)</span>
+<span id="cb45-8"><a href="lectura-de-datos.html#cb45-8" tabindex="-1"></a><span class="fu">points</span>(init2[<span class="dv">1</span>], init2[<span class="dv">2</span>], <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">pch=</span><span class="dv">19</span>)</span>
+<span id="cb45-9"><a href="lectura-de-datos.html#cb45-9" tabindex="-1"></a><span class="fu">points</span>(postmean2[<span class="dv">1</span>], postmean2[<span class="dv">2</span>], <span class="at">col=</span><span class="st">&quot;orange&quot;</span>, <span class="at">pch=</span><span class="dv">19</span>)</span>
+<span id="cb45-10"><a href="lectura-de-datos.html#cb45-10" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="at">col=</span><span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;orange&quot;</span>), <span class="at">legend=</span><span class="fu">c</span>(<span class="st">&quot;Initial value&quot;</span>, <span class="st">&quot;Post. mean&quot;</span>), <span class="at">pch=</span><span class="dv">19</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="lectura-de-datos.html#cb46-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfcol=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb46-2"><a href="lectura-de-datos.html#cb46-2" tabindex="-1"></a><span class="fu">plot</span>(beta_post_adaptguide[,<span class="dv">2</span>], <span class="at">type=</span><span class="st">&#39;l&#39;</span>,  <span class="at">ylab=</span><span class="fu">expression</span>(beta[<span class="dv">1</span>]), <span class="at">xlab=</span><span class="st">&quot;Iteration&quot;</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>))</span>
+<span id="cb46-3"><a href="lectura-de-datos.html#cb46-3" tabindex="-1"></a><span class="fu">plot</span>(beta_post_adaptguide2[,<span class="dv">2</span>], <span class="at">type=</span><span class="st">&#39;l&#39;</span>,  <span class="at">ylab=</span><span class="fu">expression</span>(beta[<span class="dv">1</span>]), <span class="at">xlab=</span><span class="st">&quot;Iteration&quot;</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>))</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="lectura-de-datos.html#cb47-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(beta_post_adaptguide[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>),<span class="dv">2</span>]), <span class="at">xlab=</span><span class="fu">expression</span>(beta[<span class="dv">1</span>]), <span class="at">ylab=</span><span class="st">&quot;Density&quot;</span>, <span class="at">main=</span><span class="st">&quot;&quot;</span>, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>))</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="lectura-de-datos.html#cb48-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(beta_post_adaptguide2[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>), <span class="dv">2</span>]), <span class="at">xlab=</span><span class="fu">expression</span>(beta[<span class="dv">1</span>]), <span class="at">ylab=</span><span class="st">&quot;Density&quot;</span>, <span class="at">main=</span><span class="st">&quot;&quot;</span>, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>))</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-19-2.png" width="672" /></p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="lectura-de-datos.html#cb49-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfcol=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</span>
+<span id="cb49-2"><a href="lectura-de-datos.html#cb49-2" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="lectura-de-datos.html#cb49-3" tabindex="-1"></a><span class="fu">plot</span>(rd_adaptguide, <span class="at">type=</span><span class="st">&#39;l&#39;</span>,  <span class="at">ylab=</span><span class="st">&quot;RD*1000&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Iteration&quot;</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span>.<span class="dv">2</span>, .<span class="dv">5</span>))</span>
+<span id="cb49-4"><a href="lectura-de-datos.html#cb49-4" tabindex="-1"></a><span class="fu">plot</span>(rd_adaptguide2, <span class="at">type=</span><span class="st">&#39;l&#39;</span>,  <span class="at">ylab=</span><span class="st">&quot;RD*1000&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Iteration&quot;</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span>.<span class="dv">2</span>, .<span class="dv">5</span>))</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="lectura-de-datos.html#cb50-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(rd_adaptguide[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>)]), <span class="at">xlab=</span><span class="fu">expression</span>(beta[<span class="dv">1</span>]), <span class="at">ylab=</span><span class="st">&quot;Density&quot;</span>, <span class="at">main=</span><span class="st">&quot;&quot;</span>, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span>.<span class="dv">2</span>, .<span class="dv">5</span>))</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="lectura-de-datos.html#cb51-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(rd_adaptguide2[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>)]), <span class="at">xlab=</span><span class="st">&quot;RD*1000&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;Density&quot;</span>, <span class="at">main=</span><span class="st">&quot;&quot;</span>, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span>.<span class="dv">2</span>, .<span class="dv">5</span>))</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-21-2.png" width="672" /></p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="lectura-de-datos.html#cb52-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfcol=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code></pre></div>
+<p>Los gráficos resultantes ilustran la distribución posterior de los parámetros beta0 y beta1 en dos contextos diferentes de estimación.</p>
+<p>En el primer gráfico, donde se aplican priors uniformes, se presentan puntos dispersos en un plano bidimensional que reflejan la probabilidad conjunta de los parámetros.</p>
+<p>El segundo gráfico utiliza priors informativos y muestra una distribución posterior similar, pero con información previa incorporada en la estimación.</p>
+<p>Tambien estos gráficos muestran cómo cambian las estimaciones del parámetro beta1 a lo largo de múltiples iteraciones en dos enfoques de Muestreo de Cadenas de Markov Monte Carlo (MCMC). Basicamente lo que nos muestran estos gráficos es cómo las estimaciones de beta1 se estabilizan a medida que se ejecutan más iteraciones, haciendo las estimaciones más precisas y fiables.</p>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="conclusiones.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/index.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
